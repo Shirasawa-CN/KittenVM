@@ -10,3 +10,6 @@ authors = ["Shirasawa"]
 crate-type = ["rlib", "cdylib", "staticlib"]
 
 [dependencies]
+thiserror = "1.0.33"
+anyhow = "1.0.63"
+tokio = "1.21.0"

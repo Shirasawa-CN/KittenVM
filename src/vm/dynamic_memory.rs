@@ -46,6 +46,9 @@ pub struct DynamicMemory<T> {
 
 impl<T> DynamicMemory<T> {
     fn free(&mut self) -> Result<()> {
+        for i in self.gc.position.iter(){
+            self.stack.value.remove(*i);
+        }
         Ok(())
     }
 }

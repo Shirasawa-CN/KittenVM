@@ -1,12 +1,19 @@
-use anyhow::Result;
+use anyhow::{Ok, Result};
+use std::path::Path;
 
-#[cfg(target_os = "windows")]
-fn build_binary(file_path: String) -> Result<String> {
-    Ok(file_path)
+pub enum Gc {
+    SimpleGC,
+    NGC,
+}
+pub enum Safe{
+    Safe,
+    Unsafe,
+}
+pub struct Mode{
+    gc: Gc,
+    safe: Safe,
 }
 
-#[allow(dead_code)]
-#[cfg(target_os = "linux")]
-fn build_binary(file_path: String) -> Result<String> {
-    Ok(file_path)
+pub fn file(_file_path: &Path) -> Result<()> {
+    Ok(())
 }

@@ -1,17 +1,23 @@
 use anyhow::{Ok, Result};
 use std::path::Path;
 
-pub enum Gc {
-    SimpleGC,
-    NGC,
-}
-pub enum Safe{
+enum SafeMode {
     Safe,
-    Unsafe,
+    Normal,
+}
+
+enum GCMode{
+    SimpleGC,
+    UnGC,
 }
 pub struct Mode{
-    gc: Gc,
-    safe: Safe,
+    safe_mode: SafeMode,
+    gc_mode: GCMode,
+}
+
+
+pub fn stream(code: String) -> Result<()> {
+    Ok(())
 }
 
 pub fn file(_file_path: &Path) -> Result<()> {

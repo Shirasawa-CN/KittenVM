@@ -6,15 +6,14 @@ enum SafeMode {
     Normal,
 }
 
-enum GCMode{
+enum GCMode {
     SimpleGC,
     UnGC,
 }
-pub struct Mode{
+pub struct Mode {
     safe_mode: SafeMode,
     gc_mode: GCMode,
 }
-
 
 pub fn stream(code: String) -> Result<()> {
     Ok(())

@@ -32,6 +32,9 @@ impl<
             + std::ops::BitAnd<Output = T>,
     > KittenVM<T>
 {
+    /*
+    匹配指令
+    */
     pub fn matcher(&mut self, code: String) -> Result<()>
     where
         <T as FromStr>::Err: Send,
@@ -48,7 +51,7 @@ impl<
             "add_gc" => self.dynamic_memory.add_gc(code_info[1].parse()?),
             "new" => self
                 .dynamic_memory
-                .new(code_info[1].parse()?, code_info[2].parse()?),
+                .new(code_info[1].parse()?),
             "mov" => self
                 .dynamic_memory
                 .mov(code_info[1].parse()?, code_info[2].parse()?),

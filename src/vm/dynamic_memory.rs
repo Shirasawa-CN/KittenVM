@@ -61,6 +61,9 @@ impl<
 where
     T: std::ops::Add<T>,
 {
+    /*
+    动态内存池指令 
+    */
     pub fn free(&mut self) -> Result<(), anyhow::Error> {
         for i in self.gc.position.iter() {
             if *i as usize > self.stack.value.len() {
@@ -85,10 +88,10 @@ where
         self.gc.position.push(add_position);
         Ok(())
     }
-    pub fn new(&mut self, value: T, target: usize) -> Result<()> {
+    pub fn new(&mut self, value: T) -> Result<usize> {
         self.stack.value.push(value);
         let result = self.stack.value.len();
-        Ok(())
+        Ok(result)
     }
     pub fn mov(&mut self, value: T, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {

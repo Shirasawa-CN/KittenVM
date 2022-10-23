@@ -1,0 +1,10 @@
+Mode:
+Gc: Ungc
+SafeMode: Normal
+
+Code:
+a = new 15
+b = new 16
+add_gc a
+add_gc b
+free

@@ -88,10 +88,11 @@ where
         self.gc.position.push(add_position);
         Ok(())
     }
-    pub fn new(&mut self, value: T) -> Result<usize> {
+    pub fn new(&mut self, value: T) -> Result<()> {
         self.stack.value.push(value);
         let result = self.stack.value.len();
-        Ok(result)
+        tracing::info!("{}",result);
+        Ok(())
     }
     pub fn mov(&mut self, value: T, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {

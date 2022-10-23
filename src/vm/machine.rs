@@ -46,7 +46,7 @@ impl<
         }
         let code_info: Vec<&str> = code.split(' ').collect();
         let in_match = code_info[0];
-        let result = match in_match {
+        let result:Result<(), anyhow::Error> = match in_match {
             "free" => self.dynamic_memory.free(),
             "add_gc" => self.dynamic_memory.add_gc(code_info[1].parse()?),
             "new" => self

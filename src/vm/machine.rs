@@ -11,7 +11,7 @@ enum Status {
 }
 
 pub struct KittenVM<T> {
-    pub const_pool: ConstPool<T>,
+    pub const_pool: ConstPool,
     pub dynamic_memory: DynamicMemory<T>,
     status: Status,
     pub mode: Mode,
@@ -46,12 +46,13 @@ impl<
         }
         let code_info: Vec<&str> = code.split(' ').collect();
         let in_match = code_info[0];
-        let result:Result<(), anyhow::Error> = match in_match {
+        let result: Result<(), anyhow::Error> = match in_match {
             "free" => self.dynamic_memory.free(),
             "add_gc" => self.dynamic_memory.add_gc(code_info[1].parse()?),
-            "new" => self
-                .dynamic_memory
-                .new(code_info[1].parse()?),
+            "new" => self.const_pool.add(
+                code_info[1].to_string(),
+                self.dynamic_memory.new(code_info[1].parse()?),
+            ),
             "mov" => self
                 .dynamic_memory
                 .mov(code_info[1].parse()?, code_info[2].parse()?),

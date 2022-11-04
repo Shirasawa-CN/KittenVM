@@ -1,23 +1,30 @@
-pub struct ConstPool<T> {
-    Int: Vec<i128>,
-    Nnint: Vec<usize>,
-    Fract: Vec<f64>,
-    Bool: Vec<bool>,
-    Char: Vec<char>,
-    Vector: Vec<Vec<T>>,
+use anyhow::{Ok, Result};
+use std::collections::HashMap;
+
+//存储变量名和位置
+pub struct ConstPool {
+    Pool: HashMap<String, usize>,
 }
 
 const CONST_POOL_INIT_CAP: usize = 8;
 
-impl<T> ConstPool<T> {
+impl ConstPool {
     pub fn new(&self) -> Self {
         Self {
-            Int: Vec::with_capacity(CONST_POOL_INIT_CAP),
-            Nnint: Vec::with_capacity(CONST_POOL_INIT_CAP),
-            Fract: Vec::with_capacity(CONST_POOL_INIT_CAP),
-            Bool: Vec::with_capacity(CONST_POOL_INIT_CAP),
-            Char: Vec::with_capacity(CONST_POOL_INIT_CAP),
-            Vector: Vec::with_capacity(CONST_POOL_INIT_CAP),
+            Pool: HashMap::with_capacity(CONST_POOL_INIT_CAP),
+        }
+    }
+    pub fn add(&mut self, name: String, target: usize) -> Result<()> {
+        self.Pool.insert(name, target);
+        Ok(())
+    }
+    pub fn search(&self, name: String) -> Result<Option<&usize>, anyhow::Error> {
+        let result = self.Pool.get(&name);
+        if result.is_some() {
+            Ok(result)
+        } else {
+            tracing::error!("Can't find {}", name);
+            Err(anyhow::anyhow!("Can't find {}", name))
         }
     }
 }

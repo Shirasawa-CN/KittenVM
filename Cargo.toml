@@ -2,7 +2,11 @@
 name = "KittenVM"
 version = "1.0.0-1"
 edition = "2021"
-authors = ["Shirasawa"]
+authors = ["Shirasawa <3489840593@qq.com>"]
+license = "Mulan PubL v2"
+description = " it is an imaginative LVM."
+readme = "README.md"
+repository = "https://gitee.com/Shirasawa-CN/kitten-vm"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

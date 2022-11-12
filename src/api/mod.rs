@@ -1,6 +1,7 @@
 use crate::vm::machine;
 use anyhow::{Ok, Result};
-use std::{path::Path, str::FromStr};
+use num_traits::NumOps;
+use std::{path::Path, str::FromStr, sync::Arc};
 
 enum SafeMode {
     Safe,
@@ -23,29 +24,30 @@ pub struct API<T> {
 impl<
         T: 'static
             + Clone
-            + std::str::FromStr
-            + std::ops::Add<Output = T>
-            + std::ops::Sub<Output = T>
-            + std::ops::Mul<Output = T>
-            + std::ops::Div<Output = T>
-            + std::ops::Shl<Output = T>
-            + std::ops::Shr<Output = T>
-            + std::ops::BitXor<Output = T>
-            + std::ops::BitOr<Output = T>
-            + std::ops::BitAnd<Output = T>,
+            + NumOps
+            + std::ops::BitAnd
+            + std::ops::BitXor
+            + std::ops::BitOr
+            + std::ops::Shl
+            + std::ops::Shr
+            + std::str::FromStr,
     > API<T>
+where
+    <T as FromStr>::Err: Sync,
+    <T as FromStr>::Err: std::error::Error,
+    <T as FromStr>::Err: Send,
+    Arc<T>: NumOps,
+    Arc<T>: std::ops::BitAnd<Output = Arc<T>>,
+    Arc<T>: std::ops::BitXor<Output = Arc<T>>,
+    Arc<T>: std::ops::BitOr<Output = Arc<T>>,
+    Arc<T>: std::ops::Shl<Output = Arc<T>>,
+    Arc<T>: std::ops::Shr<Output = Arc<T>>,
 {
     pub fn file(_file_path: &Path) -> Result<()> {
         Ok(())
     }
 
-    pub fn stream(&mut self, code: String) -> Result<(), anyhow::Error>
-    where
-        <T as FromStr>::Err: Sync,
-        <T as FromStr>::Err: std::error::Error,
-        <T as FromStr>::Err: Send,
-    {
-        let result = machine::KittenVM::matcher(&mut self.vm, code);
-        result
+    pub fn stream(&mut self, code: String) -> Result<(), anyhow::Error> {
+        machine::KittenVM::matcher(&mut self.vm, code)
     }
 }

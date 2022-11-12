@@ -1,33 +1,23 @@
-use std::usize;
+use std::{collections::HashMap, sync::Arc, usize};
 
 use anyhow::{Ok, Result};
+use num_traits::NumOps;
 
-use crate::vm::machine;
-
-const CONST_POOL_INIT_CAP: usize = 8;
-
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct Stack<T> {
-    pub value: Vec<T>,
-}
-
-impl<T> Default for Stack<T> {
-    fn default() -> Self {
-        Self {
-            value: Vec::<T>::with_capacity(CONST_POOL_INIT_CAP),
-        }
-    }
+    pub value: Vec<Arc<T>>,
+    pub pool: HashMap<String, usize>,
 }
 
 impl<T: Clone> Stack<T> {
-    pub fn pop(&mut self) -> Result<std::option::Option<T>, anyhow::Error> {
+    pub fn pop(&mut self) -> Result<std::option::Option<std::sync::Arc<T>>, anyhow::Error> {
         if self.value.is_empty() {
             tracing::error!("Stack.value.is_empty");
             return Err(anyhow::anyhow!("Stack.value.is_empty"));
         }
         Ok(self.value.pop())
     }
-    pub fn peek(&mut self) -> Result<std::option::Option<T>, anyhow::Error> {
+    pub fn peek(&mut self) -> Result<std::option::Option<std::sync::Arc<T>>, anyhow::Error> {
         if self.value.is_empty() {
             tracing::error!("Stack.value.is_empty");
             return Err(anyhow::anyhow!("Stack.value.is_empty"));
@@ -36,7 +26,7 @@ impl<T: Clone> Stack<T> {
         Ok(Some(self.value[index].clone()))
     }
     pub fn push(&mut self, add_data: T) {
-        self.value.push(add_data.clone())
+        self.value.push(Arc::new(add_data.clone()));
     }
 }
 
@@ -52,18 +42,20 @@ pub struct DynamicMemory<T> {
 impl<
         T: 'static
             + Clone
-            + std::ops::Add<Output = T>
-            + std::ops::Sub<Output = T>
-            + std::ops::Mul<Output = T>
-            + std::ops::Div<Output = T>
-            + std::ops::Shl<Output = T>
-            + std::ops::Shr<Output = T>
-            + std::ops::BitXor<Output = T>
-            + std::ops::BitOr<Output = T>
-            + std::ops::BitAnd<Output = T>,
+            + NumOps
+            + std::ops::BitAnd
+            + std::ops::BitXor
+            + std::ops::BitOr
+            + std::ops::Shl
+            + std::ops::Shr,
     > DynamicMemory<T>
 where
-    T: std::ops::Add<T>,
+    Arc<T>: NumOps,
+    Arc<T>: std::ops::BitAnd<Output = Arc<T>>,
+    Arc<T>: std::ops::BitXor<Output = Arc<T>>,
+    Arc<T>: std::ops::BitOr<Output = Arc<T>>,
+    Arc<T>: std::ops::Shl<Output = Arc<T>>,
+    Arc<T>: std::ops::Shr<Output = Arc<T>>,
 {
     pub fn add(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
@@ -141,7 +133,7 @@ where
                 "The destination address is not in the allocated memory range"
             ));
         }
-        self.stack.value[target] = value;
+        self.stack.value[target] = Arc::new(value);
         Ok(())
     }
     pub fn mul(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
@@ -157,10 +149,9 @@ where
         self.stack.value[target] = self.stack.value[rs1].clone() * self.stack.value[rs2].clone();
         Ok(())
     }
-    pub fn new(&mut self, rs: T) -> usize {
-        self.stack.value.push(rs);
-        let result = self.stack.value.len();
-        result
+    pub fn new_mem(&mut self, rs: T) -> usize {
+        self.stack.value.push(Arc::new(rs));
+        self.stack.value.len()
     }
     pub fn or(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {

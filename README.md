@@ -2,7 +2,13 @@
 大抵是一个想象力丰富的LVM吧。
 
 ## 使用
-代码转换为KVM IR后，将被KVM运行。本项目会编译成C语言规范或rylib的动态库。
+### Rust
+'''
+KittenVM = "1.0.0-1"
+'''
+### C/C++
+确保KittenVM.lib要和libKittenVM.d在同一目录下；如果使用CMake之类的构建工具，确保正确引用！
+[Staticlib下载](https://gitee.com/Shirasawa-CN/kitten-vm/releases)
 
 ## 特性
 本玩具具有许多奇奇怪怪的脑洞特性，请移步到[README](./docs/README.md)

@@ -3,9 +3,18 @@
 
 ## 使用
 ### Rust
-'''
+```
+[dependencies]
 KittenVM = "1.0.0-1"
-'''
+```
+
+```
+use KittenVM::API;
+
+let a = API::stream(new a);
+//----------OR--------------
+let result = API::file("file.kvm");
+```
 ### C/C++
 确保KittenVM.lib要和libKittenVM.d在同一目录下；如果使用CMake之类的构建工具，确保正确引用！
 [Staticlib下载](https://gitee.com/Shirasawa-CN/kitten-vm/releases)

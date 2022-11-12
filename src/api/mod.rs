@@ -43,11 +43,11 @@ where
     Arc<T>: std::ops::Shl<Output = Arc<T>>,
     Arc<T>: std::ops::Shr<Output = Arc<T>>,
 {
-    pub fn file(_file_path: &Path) -> Result<()> {
+    pub async fn file(_file_path: &Path) -> Result<()> {
         Ok(())
     }
 
-    pub fn stream(&mut self, code: String) -> Result<(), anyhow::Error> {
-        machine::KittenVM::matcher(&mut self.vm, code)
+    pub async fn stream(&mut self, code: String) -> Result<(), anyhow::Error> {
+        machine::KittenVM::matcher(&mut self.vm, code).await
     }
 }

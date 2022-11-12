@@ -57,7 +57,7 @@ where
     Arc<T>: std::ops::Shl<Output = Arc<T>>,
     Arc<T>: std::ops::Shr<Output = Arc<T>>,
 {
-    pub fn add(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
+    pub async fn add(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
             tracing::error!(
                 "The destination address is not in the allocated memory range. Traget:{}",
@@ -70,12 +70,12 @@ where
         self.stack.value[target] = self.stack.value[rs1].clone() + self.stack.value[rs2].clone();
         Ok(())
     }
-    pub fn add_gc(&mut self, add_position: usize) -> Result<()> {
+    pub async fn add_gc(&mut self, add_position: usize) -> Result<()> {
         tracing::info!("add_gc add_position:{} Success", &add_position);
         self.gc.position.push(add_position);
         Ok(())
     }
-    pub fn and(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
+    pub async fn and(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
             tracing::error!(
                 "The destination address is not in the allocated memory range. Traget:{}",
@@ -88,7 +88,7 @@ where
         self.stack.value[target] = self.stack.value[rs1].clone() & self.stack.value[rs2].clone();
         Ok(())
     }
-    pub fn div(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
+    pub async fn div(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
             tracing::error!(
                 "The destination address is not in the allocated memory range. Traget:{}",
@@ -123,7 +123,7 @@ where
         }
         Ok(())
     }
-    pub fn mov(&mut self, value: T, target: usize) -> Result<(), anyhow::Error> {
+    pub async fn mov(&mut self, value: T, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
             tracing::error!(
                 "The destination address is not in the allocated memory range. Traget:{}",
@@ -136,7 +136,7 @@ where
         self.stack.value[target] = Arc::new(value);
         Ok(())
     }
-    pub fn mul(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
+    pub async fn mul(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
             tracing::error!(
                 "The destination address is not in the allocated memory range. Traget:{}",
@@ -149,11 +149,11 @@ where
         self.stack.value[target] = self.stack.value[rs1].clone() * self.stack.value[rs2].clone();
         Ok(())
     }
-    pub fn new_mem(&mut self, rs: T) -> usize {
+    pub async fn new_mem(&mut self, rs: T) -> usize {
         self.stack.value.push(Arc::new(rs));
         self.stack.value.len()
     }
-    pub fn or(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
+    pub async fn or(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
             tracing::error!(
                 "The destination address is not in the allocated memory range. Traget:{}",
@@ -166,7 +166,7 @@ where
         self.stack.value[target] = self.stack.value[rs1].clone() | self.stack.value[rs2].clone();
         Ok(())
     }
-    pub fn sll(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
+    pub async fn sll(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
             tracing::error!(
                 "The destination address is not in the allocated memory range. Traget:{}",
@@ -179,7 +179,7 @@ where
         self.stack.value[target] = self.stack.value[rs1].clone() << self.stack.value[rs2].clone();
         Ok(())
     }
-    pub fn sra(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
+    pub async fn sra(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
             tracing::error!(
                 "The destination address is not in the allocated memory range. Traget:{}",
@@ -192,7 +192,7 @@ where
         self.stack.value[target] = self.stack.value[rs1].clone() >> self.stack.value[rs2].clone();
         Ok(())
     }
-    pub fn sud(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
+    pub async fn sud(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
             tracing::error!(
                 "The destination address is not in the allocated memory range. Traget:{}",
@@ -205,7 +205,7 @@ where
         self.stack.value[target] = self.stack.value[rs1].clone() - self.stack.value[rs2].clone();
         Ok(())
     }
-    pub fn xor(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
+    pub async fn xor(&mut self, rs1: usize, rs2: usize, target: usize) -> Result<(), anyhow::Error> {
         if target > self.stack.value.len() {
             tracing::error!(
                 "The destination address is not in the allocated memory range. Traget:{}",

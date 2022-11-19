@@ -2,6 +2,7 @@ use anyhow::{Ok, Result};
 use std::collections::HashMap;
 
 //存储变量名和位置
+#[derive(Default)]
 pub struct ConstPool {
     Pool: HashMap<String, usize>,
 }

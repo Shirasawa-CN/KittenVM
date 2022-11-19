@@ -17,32 +17,20 @@ pub struct Mode {
     gc_mode: GCMode,
 }
 
-pub struct API<T> {
-    vm: machine::KittenVM<T>,
+impl Default for Mode {
+    fn default() -> Self {
+        Self {
+            safe_mode: SafeMode::Normal,
+            gc_mode: GCMode::UnGC,
+        }
+    }
 }
 
-impl<
-        T: 'static
-            + Clone
-            + NumOps
-            + std::ops::BitAnd
-            + std::ops::BitXor
-            + std::ops::BitOr
-            + std::ops::Shl
-            + std::ops::Shr
-            + std::str::FromStr,
-    > API<T>
-where
-    <T as FromStr>::Err: Sync,
-    <T as FromStr>::Err: std::error::Error,
-    <T as FromStr>::Err: Send,
-    Arc<T>: NumOps,
-    Arc<T>: std::ops::BitAnd<Output = Arc<T>>,
-    Arc<T>: std::ops::BitXor<Output = Arc<T>>,
-    Arc<T>: std::ops::BitOr<Output = Arc<T>>,
-    Arc<T>: std::ops::Shl<Output = Arc<T>>,
-    Arc<T>: std::ops::Shr<Output = Arc<T>>,
-{
+pub struct API {
+    vm: machine::KittenVM,
+}
+
+impl API {
     pub async fn file(_file_path: &Path) -> Result<()> {
         Ok(())
     }

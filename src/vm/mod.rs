@@ -1,4 +1,4 @@
 mod const_pool;
-mod dynamic_memory;
+pub mod dynamic_memory;
 pub mod machine;
-mod value_type;
+pub mod value_type;

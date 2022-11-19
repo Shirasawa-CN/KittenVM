@@ -1,4 +1,5 @@
 mod analysis;
 pub mod api;
 mod bitcode;
-mod vm;
+mod test;
+pub mod vm;

@@ -1,6 +1,6 @@
 [package]
 name = "KittenVM"
-version = "1.0.0-3"
+version = "1.0.0-4"
 edition = "2021"
 authors = ["Shirasawa <3489840593@qq.com>"]
 license = "MulanPSL-2.0"

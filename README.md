@@ -1,6 +1,8 @@
 # KittenVM
 大抵是一个想象力丰富的LVM吧。
 
+[English?](https://gitee.com/Shirasawa-CN/kitten-vm/README_en.md)
+
 ## 使用
 
 ### Warning:关于稳定性！

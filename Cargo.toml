@@ -1,5 +1,5 @@
 [package]
-name = "kittenvm"
+name = "KittenVM"
 version = "1.0.0-3"
 edition = "2021"
 authors = ["Shirasawa <3489840593@qq.com>"]
